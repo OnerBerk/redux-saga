@@ -1,12 +1,25 @@
+import {useEffect} from "react";
 import './App.css';
-import axios from "axios";
+import Yield from "./yieldExample/yield";
+import {connect, useSelector} from "react-redux";
+import {getUsersRequest} from "../actions/users.actions";
+import UserList from "./userList";
 
-const App = () => {
+const App = ({getUsersRequest}) => {
+    const userslist = useSelector(state => state.users.items)
+
+    //console.log(Yield())
+    useEffect(() => {
+        getUsersRequest()
+    }, [])
+
+
     return (
         <div className="App">
-            <h1>test</h1>
+            <UserList users={userslist}/>
         </div>
     );
 }
-
-export default App;
+export default connect(null, {
+    getUsersRequest
+})(App);
