@@ -1,11 +1,12 @@
 import {useEffect} from "react";
 import './App.css';
-import Yield from "./yieldExample/yield";
+//import Yield from "./yieldExample/yield";
 import {connect, useSelector} from "react-redux";
-import {getUsersRequest} from "../actions/users.actions";
+import {getUsersRequest, createUsersRequest, deleteUsersRequest} from "../actions/users.actions";
 import UserList from "./userList";
+import NewUser from "./newUser";
 
-const App = ({getUsersRequest}) => {
+const App = ({getUsersRequest, createUsersRequest,deleteUsersRequest}) => {
     const userslist = useSelector(state => state.users.items)
 
     //console.log(Yield())
@@ -13,13 +14,23 @@ const App = ({getUsersRequest}) => {
         getUsersRequest()
     }, [])
 
+    const handlSubmit = ({firstName, lastName}) => {
+        createUsersRequest({
+            firstName,
+            lastName
+        })
+    }
+    const handledleteUser=(userId)=>{
+        deleteUsersRequest(userId)
+    }
 
     return (
         <div className="App">
-            <UserList users={userslist}/>
+            <NewUser onSubmit={handlSubmit}/>
+            <UserList users={userslist} onDeleteUser={handledleteUser}/>
         </div>
     );
 }
 export default connect(null, {
-    getUsersRequest
+    getUsersRequest, createUsersRequest,deleteUsersRequest
 })(App);
